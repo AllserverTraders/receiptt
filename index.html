@@ -190,7 +190,6 @@
                 grid-column: span 1;
             }
         }
-        /* small hint */
         .soft-text {
             color: #3d5675;
             font-size: 0.9rem;
@@ -221,7 +220,7 @@
     </div>
 
     <div class="form-grid">
-        <!-- client & delivery (unchanged structure) -->
+        <!-- client & delivery -->
         <div class="field-group">
             <label>Client Name</label>
             <input type="text" id="clientName" placeholder="Enter client name">
@@ -277,10 +276,9 @@
 
 <script>
     // ------ GLOBAL MODE & PAID TOGGLE ------
-    let mode = "invoice";              // 'invoice' or 'quotation'
-    let paidEnabled = false;           // only for invoice
+    let mode = "invoice";
+    let paidEnabled = false;
 
-    // DOM elements
     const docTypeSpan = document.getElementById("documentType");
     const invoiceBtn = document.getElementById("invoiceModeBtn");
     const quotationBtn = document.getElementById("quotationModeBtn");
@@ -289,18 +287,17 @@
 
     function setMode(selectedMode) {
         mode = selectedMode;
-        // update active class
         if (mode === "invoice") {
             invoiceBtn.classList.add("active");
             quotationBtn.classList.remove("active");
             docTypeSpan.innerText = "Invoice";
-            paidToggleArea.style.display = "flex";    // show toggle
+            paidToggleArea.style.display = "flex";
         } else {
             quotationBtn.classList.add("active");
             invoiceBtn.classList.remove("active");
             docTypeSpan.innerText = "Quotation";
-            paidToggleArea.style.display = "none";     // hide toggle
-            paidEnabled = false;                         // reset
+            paidToggleArea.style.display = "none";
+            paidEnabled = false;
             toggleSwitch.classList.remove("active");
         }
     }
@@ -315,10 +312,9 @@
         }
     }
 
-    // initial call to set invoice active
     setMode("invoice");
 
-    // ------ DOCUMENT NUMBERING (separate counters) ------
+    // ------ DOCUMENT NUMBERING ------
     function getNextDocumentNumber() {
         let storageKey = mode === "invoice" ? "AST_invoiceCounter" : "AST_quotationCounter";
         let lastNumber = parseInt(localStorage.getItem(storageKey));
@@ -331,24 +327,22 @@
         return String(lastNumber).padStart(3, "0");
     }
 
-    // ------ PRICE LISTS (matching IDs) ------
+    // ------ PRICE LISTS ------
     const ppeItems = {
         bootsShort: 340, bootsHigh: 420, bootsLaceless: 450,
         suitNavy: 220, suitFire: 400, labCoat: 150,
         goggles: 40, gloves: 30,
-        comboFire: 450,   // Fire suit + goggles + gloves
-        comboNavy: 270     // Navy suit + goggles + gloves
+        comboFire: 450,
+        comboNavy: 270
     };
 
     const softwareItems = { winInstall: 200 };
-    // loan is special: it's just an amount paid field (not a product)
     const electronicsItems = {
         ext5: 75, extHD: 85, chargerLaptopC: 250, chargerUniversal: 150,
         screenProtector: 40, chargerCComplete: 100, chargerIPhone: 110,
         cableCtoC: 55, cableCtoLight: 60, fastAdapter: 65
     };
 
-    // friendly display names
     const displayNames = {
         bootsShort: "Short-Cut Boots", bootsHigh: "High-Cut Boots", bootsLaceless: "Lace-less Boots",
         suitNavy: "Standard Navy Work Suit", suitFire: "Fire Resistant Work Suit",
@@ -368,34 +362,32 @@
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
 
-        // Client & delivery
         let client = document.getElementById("clientName").value || "N/A";
         let deliveryType = document.getElementById("deliveryType").value;
-        let deliveryExtra = (deliveryType === "priority") ? 20 : 0;  // small handling fee
+        let deliveryExtra = (deliveryType === "priority") ? 20 : 0;
 
         let today = new Date().toLocaleDateString("en-ZA");
         let numberFormatted = getNextDocumentNumber();
         let docNumber = (mode === "invoice" ? "AST-INV-" : "AST-QUO-") + numberFormatted;
         let title = mode === "invoice" ? "INVOICE" : "QUOTATION";
 
-        // images (all JPEG)
+        // Load images (updated file names)
         const logo = new Image();
-        const stamp = new Image();
+        const paidImg = new Image();   // previously stamp.jpg, now paid.png
         const signature = new Image();
-        logo.src = "logo.jpeg";           // make sure files exist in same folder
-        stamp.src = "stamp.jpg";
-        signature.src = "signature.jpeg";
+        logo.src = "assets/logo.jpeg";
+        paidImg.src = "assets/paid.png";
+        signature.src = "assets/signature.jpeg";
 
-        // We'll generate after images load (simple approach)
         let imagesLoaded = 0;
         function tryGenerate() {
             imagesLoaded++;
             if (imagesLoaded === 3) buildPDF();
         }
         logo.onload = tryGenerate;
-        stamp.onload = tryGenerate;
+        paidImg.onload = tryGenerate;
         signature.onload = tryGenerate;
-        // fallback if images missing (still generate after timeout)
+        // fallback if images missing
         setTimeout(() => { if (imagesLoaded < 3) imagesLoaded = 3; buildPDF(); }, 500);
 
         function buildPDF() {
@@ -421,8 +413,6 @@
             doc.line(15, y, 195, y);
             y += 8;
 
-            // Bill To
-            doc.setFontSize(11);
             doc.text("Bill To:", 15, y);
             y += 5;
             doc.text(client, 15, y);
@@ -441,7 +431,6 @@
 
             let grandTotal = 0;
 
-            // helper to add rows
             function addRow(label, qty, unitPrice) {
                 if (qty && qty > 0) {
                     let total = qty * unitPrice;
@@ -454,43 +443,35 @@
                 }
             }
 
-            // 1. PPE items (including combos)
+            // PPE
             for (let id in ppeItems) {
                 let qty = parseInt(document.getElementById(id)?.value) || 0;
-                if (qty > 0) {
-                    let label = displayNames[id] || id;
-                    let price = ppeItems[id];
-                    // combo items already include goggles/gloves, but we add them as separate line.
-                    addRow(label, qty, price);
-                }
+                if (qty > 0) addRow(displayNames[id] || id, qty, ppeItems[id]);
             }
 
-            // 2. Software
+            // Software
             for (let id in softwareItems) {
                 let qty = parseInt(document.getElementById(id)?.value) || 0;
                 if (qty > 0) addRow(displayNames[id], qty, softwareItems[id]);
             }
 
-            // 3. Electronics
+            // Electronics
             for (let id in electronicsItems) {
                 let qty = parseInt(document.getElementById(id)?.value) || 0;
                 if (qty > 0) addRow(displayNames[id], qty, electronicsItems[id]);
             }
 
-            // 4. Loans: not a product, but we show "Amount paid" if >0 (like a line with negative? or note)
+            // Loan payment
             let loanPaid = parseFloat(document.getElementById("loanPaid")?.value) || 0;
             if (loanPaid > 0) {
-                // we show as a line "Loan payment received" and subtract from total? 
-                // To keep simple: show as payment line (reduce grandTotal)
                 doc.text("Loan payment (received)", 15, y);
-                doc.text("", 105, y); // qty blank
+                doc.text("", 105, y);
                 doc.text("", 135, y);
                 doc.text("-R" + loanPaid.toFixed(2), 170, y);
                 y += 8;
                 grandTotal -= loanPaid;
             }
 
-            // optional delivery extra (small handling)
             if (deliveryExtra > 0) {
                 doc.text("Priority handling fee", 15, y);
                 doc.text("1", 105, y);
@@ -500,13 +481,11 @@
                 grandTotal += deliveryExtra;
             }
 
-            // line before total
             doc.line(130, y-2, 195, y-2);
             doc.setFont(undefined, "bold");
             doc.setFontSize(13);
             let totalY = y + 2;
 
-            // if paid toggle ON, add "PAID" near total + thanks
             if (mode === "invoice" && paidEnabled) {
                 doc.text(" TOTAL: R" + grandTotal.toFixed(2) + "  ✅ PAID", 105, totalY);
             } else {
@@ -514,23 +493,22 @@
             }
             doc.setFont(undefined, "normal");
 
-            // thanks message always at bottom
+            // Footer with images
             let pageHeight = doc.internal.pageSize.height;
             let footerY = pageHeight - 45;
 
-            // stamp & signature
-            try { doc.addImage(stamp, "JPEG", 15, footerY-10, 25, 20); } catch (e) {}
-            try { doc.addImage(signature, "JPEG", 45, footerY-10, 30, 15); } catch (e) {}
+            // Add paid.png (stamp) and signature
+            try { doc.addImage(paidImg, "PNG", 15, footerY-10, 25, 20); } catch (e) { console.warn("paid.png missing"); }
+            try { doc.addImage(signature, "JPEG", 45, footerY-10, 30, 15); } catch (e) { console.warn("signature missing"); }
 
             doc.setFontSize(10);
             doc.text("Authorized signature & stamp", 15, footerY + 12);
             doc.text("Thanks for your support! 🤝 AllServe Traders", 100, footerY + 12);
 
-            // banking details (static)
             doc.setFontSize(9);
             doc.text("Bank: Capitec | Acc: AllServe Trading | Acc No: 1234567890 | Cell: 072 550 0640", 15, pageHeight - 15);
 
-            // generate pdf blob and share
+            // Generate and share
             const pdfBlob = doc.output("blob");
             const fileName = docNumber + ".pdf";
             const pdfUrl = URL.createObjectURL(pdfBlob);
@@ -539,7 +517,6 @@
             a.download = fileName;
             a.click();
 
-            // Web share if supported
             const file = new File([pdfBlob], fileName, { type: "application/pdf" });
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
                 navigator.share({
