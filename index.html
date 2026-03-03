@@ -148,6 +148,10 @@
             border-color: #2b4f8e;
             box-shadow: 0 0 0 3px rgba(30,47,77,0.1);
         }
+        input::placeholder {
+            color: #9aa9bd;
+            opacity: 1;
+        }
         .section-title {
             grid-column: span 2;
             font-weight: 700;
@@ -220,54 +224,47 @@
     </div>
 
     <div class="form-grid">
-        <!-- client & delivery -->
+        <!-- client only – delivery removed -->
         <div class="field-group">
             <label>Client Name</label>
             <input type="text" id="clientName" placeholder="Enter client name">
         </div>
-        <div class="field-group">
-            <label>Delivery / notes</label>
-            <select id="deliveryType">
-                <option value="standard">Standard (no extra)</option>
-                <option value="priority">Priority handling (+R20 on some items)</option>
-            </select>
-        </div>
 
         <!-- ========= PPE SECTION ========= -->
         <div class="section-title">🧤 PPE</div>
-        <div class="field-group"><label>Short-Cut Boots (R340)</label><input type="number" id="bootsShort" min="0" value="0"></div>
-        <div class="field-group"><label>High-Cut Boots (R420)</label><input type="number" id="bootsHigh" min="0" value="0"></div>
-        <div class="field-group"><label>Lace-less Boots (R450)</label><input type="number" id="bootsLaceless" min="0" value="0"></div>
-        <div class="field-group"><label>Standard Navy Work Suit (R220)</label><input type="number" id="suitNavy" min="0" value="0"></div>
-        <div class="field-group"><label>Fire Resistant Work Suit (R400)</label><input type="number" id="suitFire" min="0" value="0"></div>
-        <div class="field-group"><label>Laboratory Coat (R150)</label><input type="number" id="labCoat" min="0" value="0"></div>
-        <div class="field-group"><label>Goggles (R40)</label><input type="number" id="goggles" min="0" value="0"></div>
-        <div class="field-group"><label>Gloves (R30)</label><input type="number" id="gloves" min="0" value="0"></div>
+        <div class="field-group"><label>Short-Cut Boots (R340)</label><input type="number" id="bootsShort" min="0" placeholder="0"></div>
+        <div class="field-group"><label>High-Cut Boots (R420)</label><input type="number" id="bootsHigh" min="0" placeholder="0"></div>
+        <div class="field-group"><label>Lace-less Boots (R450)</label><input type="number" id="bootsLaceless" min="0" placeholder="0"></div>
+        <div class="field-group"><label>Standard Navy Work Suit (R220)</label><input type="number" id="suitNavy" min="0" placeholder="0"></div>
+        <div class="field-group"><label>Fire Resistant Work Suit (R400)</label><input type="number" id="suitFire" min="0" placeholder="0"></div>
+        <div class="field-group"><label>Laboratory Coat (R150)</label><input type="number" id="labCoat" min="0" placeholder="0"></div>
+        <div class="field-group"><label>Goggles (R40)</label><input type="number" id="goggles" min="0" placeholder="0"></div>
+        <div class="field-group"><label>Gloves (R30)</label><input type="number" id="gloves" min="0" placeholder="0"></div>
 
         <!-- PPE combos -->
-        <div class="field-group"><label>🔥 Fire Suit + goggles + gloves (R450)</label><input type="number" id="comboFire" min="0" value="0"></div>
-        <div class="field-group"><label>🔵 Navy Suit + goggles + gloves (R270)</label><input type="number" id="comboNavy" min="0" value="0"></div>
+        <div class="field-group"><label>🔥 Fire Suit + goggles + gloves (R450)</label><input type="number" id="comboFire" min="0" placeholder="0"></div>
+        <div class="field-group"><label>🔵 Navy Suit + goggles + gloves (R270)</label><input type="number" id="comboNavy" min="0" placeholder="0"></div>
 
         <!-- ========= SOFTWARE ========= -->
         <div class="section-title">💻 Software installations</div>
-        <div class="field-group"><label>Windows 10/11 installation (R200)</label><input type="number" id="winInstall" min="0" value="0"></div>
+        <div class="field-group"><label>Windows 10/11 installation (R200)</label><input type="number" id="winInstall" min="0" placeholder="0"></div>
 
         <!-- ========= LOANS ========= -->
-        <div class="section-title">💰 Loans (amount paid)</div>
-        <div class="field-group"><label>Amount paid by client (R)</label><input type="number" id="loanPaid" min="0" value="0" step="0.01" placeholder="e.g. 500"></div>
+        <div class="section-title">💰 Loans (amount received)</div>
+        <div class="field-group"><label>Loan amount (R)</label><input type="number" id="loanPaid" min="0" step="0.01" placeholder="e.g. 500"></div>
 
         <!-- ========= ELECTRONICS ========= -->
         <div class="section-title">🔌 Electronics & cables</div>
-        <div class="field-group"><label>5m Extension (R75)</label><input type="number" id="ext5" min="0" value="0"></div>
-        <div class="field-group"><label>5m Heavy duty Extension (R85)</label><input type="number" id="extHD" min="0" value="0"></div>
-        <div class="field-group"><label>Type C Laptop charger (R250)</label><input type="number" id="chargerLaptopC" min="0" value="0"></div>
-        <div class="field-group"><label>Universal laptop charger (R150)</label><input type="number" id="chargerUniversal" min="0" value="0"></div>
-        <div class="field-group"><label>Screen protector (R40)</label><input type="number" id="screenProtector" min="0" value="0"></div>
-        <div class="field-group"><label>C type complete charger (R100)</label><input type="number" id="chargerCComplete" min="0" value="0"></div>
-        <div class="field-group"><label>Complete iPhone charger (R110)</label><input type="number" id="chargerIPhone" min="0" value="0"></div>
-        <div class="field-group"><label>Type C to Type C cable (R55)</label><input type="number" id="cableCtoC" min="0" value="0"></div>
-        <div class="field-group"><label>Type C – Lightning cable (R60)</label><input type="number" id="cableCtoLight" min="0" value="0"></div>
-        <div class="field-group"><label>30W fast charge adapter (R65)</label><input type="number" id="fastAdapter" min="0" value="0"></div>
+        <div class="field-group"><label>5m Extension (R75)</label><input type="number" id="ext5" min="0" placeholder="0"></div>
+        <div class="field-group"><label>5m Heavy duty Extension (R85)</label><input type="number" id="extHD" min="0" placeholder="0"></div>
+        <div class="field-group"><label>Type C Laptop charger (R250)</label><input type="number" id="chargerLaptopC" min="0" placeholder="0"></div>
+        <div class="field-group"><label>Universal laptop charger (R150)</label><input type="number" id="chargerUniversal" min="0" placeholder="0"></div>
+        <div class="field-group"><label>Screen protector (R40)</label><input type="number" id="screenProtector" min="0" placeholder="0"></div>
+        <div class="field-group"><label>C type complete charger (R100)</label><input type="number" id="chargerCComplete" min="0" placeholder="0"></div>
+        <div class="field-group"><label>Complete iPhone charger (R110)</label><input type="number" id="chargerIPhone" min="0" placeholder="0"></div>
+        <div class="field-group"><label>Type C to Type C cable (R55)</label><input type="number" id="cableCtoC" min="0" placeholder="0"></div>
+        <div class="field-group"><label>Type C – Lightning cable (R60)</label><input type="number" id="cableCtoLight" min="0" placeholder="0"></div>
+        <div class="field-group"><label>30W fast charge adapter (R65)</label><input type="number" id="fastAdapter" min="0" placeholder="0"></div>
 
         <button class="generate-btn" onclick="generatePDF()">📄 Generate & Share Document</button>
         <div class="note">AllServe Traders – quality products & support. Thank you for your business!</div>
@@ -363,17 +360,15 @@
         const doc = new jsPDF();
 
         let client = document.getElementById("clientName").value || "N/A";
-        let deliveryType = document.getElementById("deliveryType").value;
-        let deliveryExtra = (deliveryType === "priority") ? 20 : 0;
 
         let today = new Date().toLocaleDateString("en-ZA");
         let numberFormatted = getNextDocumentNumber();
         let docNumber = (mode === "invoice" ? "AST-INV-" : "AST-QUO-") + numberFormatted;
         let title = mode === "invoice" ? "INVOICE" : "QUOTATION";
 
-        // Load images (updated file names)
+        // Load images
         const logo = new Image();
-        const paidImg = new Image();   // previously stamp.jpg, now paid.png
+        const paidImg = new Image();
         const signature = new Image();
         logo.src = "assets/logo.jpeg";
         paidImg.src = "assets/paid.png";
@@ -387,7 +382,6 @@
         logo.onload = tryGenerate;
         paidImg.onload = tryGenerate;
         signature.onload = tryGenerate;
-        // fallback if images missing
         setTimeout(() => { if (imagesLoaded < 3) imagesLoaded = 3; buildPDF(); }, 500);
 
         function buildPDF() {
@@ -401,7 +395,7 @@
             doc.setFont(undefined, "normal");
             doc.setFontSize(9);
             doc.text("Your one-stop shop: PPE, software, electronics", 60, 27);
-            doc.text("Cell: 072 550 0640 · info@allserve.co.za", 60, 33);
+            doc.text("Cell: 073 725 2514 · info@allserve.co.za", 60, 33);
 
             doc.setFontSize(16);
             doc.text(title, 150, 20);
@@ -461,24 +455,15 @@
                 if (qty > 0) addRow(displayNames[id], qty, electronicsItems[id]);
             }
 
-            // Loan payment
-            let loanPaid = parseFloat(document.getElementById("loanPaid")?.value) || 0;
-            if (loanPaid > 0) {
-                doc.text("Loan payment (received)", 15, y);
+            // Loan amount – positive line item
+            let loanAmount = parseFloat(document.getElementById("loanPaid")?.value) || 0;
+            if (loanAmount > 0) {
+                doc.text("Loan amount received", 15, y);
                 doc.text("", 105, y);
                 doc.text("", 135, y);
-                doc.text("-R" + loanPaid.toFixed(2), 170, y);
+                doc.text("R" + loanAmount.toFixed(2), 170, y);
                 y += 8;
-                grandTotal -= loanPaid;
-            }
-
-            if (deliveryExtra > 0) {
-                doc.text("Priority handling fee", 15, y);
-                doc.text("1", 105, y);
-                doc.text("R" + deliveryExtra.toFixed(2), 135, y);
-                doc.text("R" + deliveryExtra.toFixed(2), 170, y);
-                y += 8;
-                grandTotal += deliveryExtra;
+                grandTotal += loanAmount;
             }
 
             doc.line(130, y-2, 195, y-2);
@@ -493,20 +478,40 @@
             }
             doc.setFont(undefined, "normal");
 
-            // Footer with images
+            // ----- FOOTER (images + banking if quotation) -----
             let pageHeight = doc.internal.pageSize.height;
             let footerY = pageHeight - 45;
 
-            // Add paid.png (stamp) and signature
-            try { doc.addImage(paidImg, "PNG", 15, footerY-10, 25, 20); } catch (e) { console.warn("paid.png missing"); }
-            try { doc.addImage(signature, "JPEG", 45, footerY-10, 30, 15); } catch (e) { console.warn("signature missing"); }
-
+            // Signature on left
+            try { doc.addImage(signature, "JPEG", 15, footerY-10, 30, 15); } catch (e) { console.warn("signature missing"); }
             doc.setFontSize(10);
-            doc.text("Authorized signature & stamp", 15, footerY + 12);
-            doc.text("Thanks for your support! 🤝 AllServe Traders", 100, footerY + 12);
+            doc.text("Authorized signature", 15, footerY + 12);
 
+            // Paid stamp on right
+            try { doc.addImage(paidImg, "PNG", 160, footerY-20, 30, 20); } catch (e) { console.warn("paid.png missing"); }
+            // Optional label for stamp
+            doc.text("Payment received", 165, footerY + 5);
+
+            // Banking details – only for quotation
+            if (mode === "quotation") {
+                let bankingY = pageHeight - 75;
+                doc.setFontSize(10);
+                doc.setFont(undefined, "bold");
+                doc.text("Banking Details", 15, bankingY);
+                doc.setFont(undefined, "normal");
+                bankingY += 6;
+                doc.text("Bank: Capitec Bank", 15, bankingY);
+                bankingY += 5;
+                doc.text("Account Holder: Mr AN Ramalepe", 15, bankingY);
+                bankingY += 5;
+                doc.text("Account No: 1679556728", 15, bankingY);
+                bankingY += 5;
+                doc.text("Phone: 073 725 2514", 15, bankingY);
+            }
+
+            // Thanks message (always)
             doc.setFontSize(9);
-            doc.text("Bank: Capitec | Acc: AllServe Trading | Acc No: 1234567890 | Cell: 072 550 0640", 15, pageHeight - 15);
+            doc.text("Thanks for your support! 🤝 AllServe Traders", 15, pageHeight - 15);
 
             // Generate and share
             const pdfBlob = doc.output("blob");
