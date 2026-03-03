@@ -387,7 +387,7 @@
         function buildPDF() {
             let y = 20;
 
-            // ----- HEADER -----
+            // ----- HEADER (email removed) -----
             try { doc.addImage(logo, "JPEG", 15, 10, 35, 25); } catch (e) { console.warn("logo missing"); }
             doc.setFontSize(18);
             doc.setFont(undefined, "bold");
@@ -395,7 +395,7 @@
             doc.setFont(undefined, "normal");
             doc.setFontSize(9);
             doc.text("Your one-stop shop: PPE, software, electronics", 60, 27);
-            doc.text("Cell: 073 725 2514 · info@allserve.co.za", 60, 33);
+            doc.text("Cell: 073 725 2514", 60, 33);  // email removed
 
             doc.setFontSize(16);
             doc.text(title, 150, 20);
@@ -478,23 +478,12 @@
             }
             doc.setFont(undefined, "normal");
 
-            // ----- FOOTER (images + banking if quotation) -----
+            // ----- FOOTER (banking details first, then signature, then paid stamp if enabled, then thanks) -----
             let pageHeight = doc.internal.pageSize.height;
-            let footerY = pageHeight - 45;
 
-            // Signature on left
-            try { doc.addImage(signature, "JPEG", 15, footerY-10, 30, 15); } catch (e) { console.warn("signature missing"); }
-            doc.setFontSize(10);
-            doc.text("Authorized signature", 15, footerY + 12);
-
-            // Paid stamp on right
-            try { doc.addImage(paidImg, "PNG", 160, footerY-20, 30, 20); } catch (e) { console.warn("paid.png missing"); }
-            // Optional label for stamp
-            doc.text("Payment received", 165, footerY + 5);
-
-            // Banking details – only for quotation
+            // Banking details – only for quotation, placed above signature
             if (mode === "quotation") {
-                let bankingY = pageHeight - 75;
+                let bankingY = pageHeight - 85;  // higher up to leave room for signature and stamp
                 doc.setFontSize(10);
                 doc.setFont(undefined, "bold");
                 doc.text("Banking Details", 15, bankingY);
@@ -509,9 +498,21 @@
                 doc.text("Phone: 073 725 2514", 15, bankingY);
             }
 
-            // Thanks message (always)
+            // Signature (always at bottom left)
+            let signatureY = pageHeight - 45;
+            try { doc.addImage(signature, "JPEG", 15, signatureY-10, 30, 15); } catch (e) { console.warn("signature missing"); }
+            doc.setFontSize(10);
+            doc.text("Authorized signature", 15, signatureY + 12);
+
+            // Paid stamp – only if toggle ON and mode invoice
+            if (mode === "invoice" && paidEnabled) {
+                try { doc.addImage(paidImg, "PNG", 160, signatureY-20, 30, 20); } catch (e) { console.warn("paid.png missing"); }
+                doc.text("Payment received", 165, signatureY + 5);
+            }
+
+            // Thanks message (exact string, normal font)
             doc.setFontSize(9);
-            doc.text("Thanks for your support! 🤝 AllServe Traders", 15, pageHeight - 15);
+            doc.text("T h a n k s f o r y o u r s u p p o r t ! Ø>Ý A l l S e r v e T r a d e r", 15, pageHeight - 15);
 
             // Generate and share
             const pdfBlob = doc.output("blob");
