@@ -472,7 +472,7 @@
             let totalY = y + 2;
 
             if (mode === "invoice" && paidEnabled) {
-                doc.text(" TOTAL: R" + grandTotal.toFixed(2) + "  ✅ PAID", 105, totalY);
+                doc.text(" TOTAL: R" + grandTotal.toFixed(2) , 105, totalY);
             } else {
                 doc.text(" TOTAL: R" + grandTotal.toFixed(2), 130, totalY);
             }
@@ -513,7 +513,7 @@
             // Thanks message – exact string, normal font, placed near bottom center
             doc.setFontSize(9);
             doc.setFont(undefined, "normal");
-            doc.text("Thanks For Your Support", 15, pageHeight - 15);
+            doc.text("Thanks For Your Support !", 15, pageHeight - 15);
 
             // Generate and share
             const pdfBlob = doc.output("blob");
