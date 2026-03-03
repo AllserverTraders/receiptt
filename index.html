@@ -395,7 +395,7 @@
             doc.setFont(undefined, "normal");
             doc.setFontSize(9);
             doc.text("Your one-stop shop: PPE, software, electronics", 60, 27);
-            doc.text("Cell: 073 725 2514", 60, 33);  // email removed
+            doc.text("Cell: 073 725 2514", 60, 33);
 
             doc.setFontSize(16);
             doc.text(title, 150, 20);
@@ -478,12 +478,12 @@
             }
             doc.setFont(undefined, "normal");
 
-            // ----- FOOTER (banking details first, then signature, then paid stamp if enabled, then thanks) -----
+            // ----- FOOTER (banking left, signature right, paid stamp left on invoice, thanks bottom center-ish) -----
             let pageHeight = doc.internal.pageSize.height;
 
-            // Banking details – only for quotation, placed above signature
+            // Banking details – only for quotation, positioned on left side
             if (mode === "quotation") {
-                let bankingY = pageHeight - 85;  // higher up to leave room for signature and stamp
+                let bankingY = pageHeight - 85;
                 doc.setFontSize(10);
                 doc.setFont(undefined, "bold");
                 doc.text("Banking Details", 15, bankingY);
@@ -498,21 +498,22 @@
                 doc.text("Phone: 073 725 2514", 15, bankingY);
             }
 
-            // Signature (always at bottom left)
+            // Signature – bottom right corner (x=150, y=pageHeight-45)
             let signatureY = pageHeight - 45;
-            try { doc.addImage(signature, "JPEG", 15, signatureY-10, 30, 15); } catch (e) { console.warn("signature missing"); }
+            try { doc.addImage(signature, "JPEG", 150, signatureY-10, 30, 15); } catch (e) { console.warn("signature missing"); }
             doc.setFontSize(10);
-            doc.text("Authorized signature", 15, signatureY + 12);
+            doc.text("Authorized signature", 150, signatureY + 12);
 
-            // Paid stamp – only if toggle ON and mode invoice
+            // Paid stamp – only if invoice and toggle ON, placed bottom left (x=15)
             if (mode === "invoice" && paidEnabled) {
-                try { doc.addImage(paidImg, "PNG", 160, signatureY-20, 30, 20); } catch (e) { console.warn("paid.png missing"); }
-                doc.text("Payment received", 165, signatureY + 5);
+                try { doc.addImage(paidImg, "PNG", 15, signatureY-20, 30, 20); } catch (e) { console.warn("paid.png missing"); }
+                doc.text("Payment received", 20, signatureY + 5);
             }
 
-            // Thanks message (exact string, normal font)
+            // Thanks message – exact string, normal font, placed near bottom center
             doc.setFontSize(9);
-            doc.text("T h a n k s f o r y o u r s u p p o r t ! Ø>Ý A l l S e r v e T r a d e r", 15, pageHeight - 15);
+            doc.setFont(undefined, "normal");
+            doc.text("Thanks For Your Support", 15, pageHeight - 15);
 
             // Generate and share
             const pdfBlob = doc.output("blob");
