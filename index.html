@@ -18,18 +18,18 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 20px;
+            padding: 10px;
         }
         .card {
             width: 100%;
-            max-width: 1200px;
+            max-width: 900px; /* Reduced from 1200px */
             background: white;
-            border-radius: 24px;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.1);
-            padding: 2rem 2rem 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            padding: 1.5rem; /* Reduced padding */
         }
         h1 {
-            font-size: 2rem;
+            font-size: 1.8rem; /* Slightly smaller */
             font-weight: 700;
             letter-spacing: -0.5px;
             color: #1e2f4d;
@@ -39,20 +39,21 @@
         .subtitle {
             text-align: center;
             color: #5c6f87;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
         }
         .mode-bar {
             display: flex;
-            gap: 1rem;
+            gap: 0.8rem;
             justify-content: center;
-            margin: 1rem 0 0.5rem;
+            margin: 0.8rem 0 0.3rem;
         }
         .mode-btn {
             background: none;
             border: 2px solid #d0d9e4;
-            padding: 0.6rem 2rem;
+            padding: 0.4rem 1.5rem; /* Smaller padding */
             border-radius: 40px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
             color: #2c3e5c;
             cursor: pointer;
@@ -65,10 +66,10 @@
         }
         .doc-badge {
             text-align: center;
-            font-size: 1.2rem;
-            margin: 5px auto 20px;
+            font-size: 1rem;
+            margin: 3px auto 15px;
             background: #eef2f6;
-            padding: 8px 30px;
+            padding: 5px 25px;
             border-radius: 40px;
             display: inline-block;
         }
@@ -77,9 +78,9 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 15px;
-            margin: 10px 0 20px;
-            padding: 8px 20px;
+            gap: 10px;
+            margin: 5px 0 15px;
+            padding: 5px 15px;
             background: #f8fafd;
             border-radius: 50px;
             width: fit-content;
@@ -89,8 +90,8 @@
         .toggle-switch {
             position: relative;
             display: inline-block;
-            width: 60px;
-            height: 30px;
+            width: 50px; /* Smaller toggle */
+            height: 26px;
             background: #d0d9e4;
             border-radius: 30px;
             border: 2px solid #a0b3cc;
@@ -103,45 +104,45 @@
         }
         .toggle-slider {
             position: absolute;
-            height: 26px;
-            width: 26px;
+            height: 22px;
+            width: 22px;
             background: white;
             border-radius: 50%;
             top: 2px;
             left: 2px;
             transition: 0.2s;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
         }
         .toggle-switch.active .toggle-slider {
-            left: 32px;
+            left: 26px;
         }
         .paid-label {
             font-weight: 600;
             color: #1e2f4d;
-            font-size: 1.1rem;
+            font-size: 0.95rem;
         }
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1.5rem 2rem;
+            gap: 1rem 1.5rem; /* Reduced gap */
         }
         .field-group {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 3px;
         }
         .field-group label {
             font-weight: 600;
             color: #1f3a5f;
-            font-size: 0.9rem;
+            font-size: 0.8rem; /* Smaller font */
         }
         input, select {
-            padding: 10px 14px;
+            padding: 6px 10px; /* Smaller padding */
             border: 1.5px solid #cfddee;
-            border-radius: 16px;
-            font-size: 1rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
             width: 100%;
-            margin-top: 6px;
+            margin-top: 2px;
         }
         input:focus, select:focus {
             outline: none;
@@ -151,26 +152,27 @@
         input::placeholder {
             color: #9aa9bd;
             opacity: 1;
+            font-size: 0.8rem;
         }
         .section-title {
             grid-column: span 2;
             font-weight: 700;
             color: #1e2f4d;
-            margin-top: 10px;
+            margin-top: 5px;
             border-bottom: 2px solid #dde3ec;
-            padding-bottom: 4px;
-            font-size: 1.2rem;
+            padding-bottom: 3px;
+            font-size: 1rem; /* Smaller font */
         }
         .generate-btn {
             grid-column: span 2;
             background: #1e2f4d;
             color: white;
             border: none;
-            padding: 16px;
-            font-size: 1.2rem;
+            padding: 12px; /* Smaller padding */
+            font-size: 1.1rem;
             font-weight: 700;
-            border-radius: 60px;
-            margin-top: 25px;
+            border-radius: 40px;
+            margin-top: 15px;
             cursor: pointer;
             transition: 0.2s;
         }
@@ -179,10 +181,10 @@
         }
         .note {
             grid-column: span 2;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             color: #5c6f87;
             text-align: center;
-            margin-top: 10px;
+            margin-top: 8px;
         }
         @media (max-width: 768px) {
             .form-grid {
@@ -196,7 +198,7 @@
         }
         .soft-text {
             color: #3d5675;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: normal;
         }
     </style>
@@ -265,6 +267,11 @@
         <div class="field-group"><label>Type C to Type C cable (R55)</label><input type="number" id="cableCtoC" min="0" placeholder="0"></div>
         <div class="field-group"><label>Type C – Lightning cable (R60)</label><input type="number" id="cableCtoLight" min="0" placeholder="0"></div>
         <div class="field-group"><label>30W fast charge adapter (R65)</label><input type="number" id="fastAdapter" min="0" placeholder="0"></div>
+        
+        <!-- NEW ITEMS ADDED HERE - Using exact names you provided -->
+        <div class="field-group"><label>Fast Charge USB adapter (R60)</label><input type="number" id="fastChargeUSBAdapter" min="0" placeholder="0"></div>
+        <div class="field-group"><label>USB to C cable (R50)</label><input type="number" id="usbToCCable" min="0" placeholder="0"></div>
+        <div class="field-group"><label>USB to Lightning (apple) (R55)</label><input type="number" id="usbToLightningApple" min="0" placeholder="0"></div>
 
         <button class="generate-btn" onclick="generatePDF()">📄 Generate & Share Document</button>
         <div class="note">AllServe Traders – quality products & support. Thank you for your business!</div>
@@ -337,7 +344,11 @@
     const electronicsItems = {
         ext5: 75, extHD: 85, chargerLaptopC: 250, chargerUniversal: 150,
         screenProtector: 40, chargerCComplete: 100, chargerIPhone: 110,
-        cableCtoC: 55, cableCtoLight: 60, fastAdapter: 65
+        cableCtoC: 55, cableCtoLight: 60, fastAdapter: 65,
+        // NEW ITEMS ADDED HERE - Using exact names as IDs
+        fastChargeUSBAdapter: 60,
+        usbToCCable: 50,
+        usbToLightningApple: 55
     };
 
     const displayNames = {
@@ -351,13 +362,20 @@
         chargerLaptopC: "Type C Laptop Charger", chargerUniversal: "Universal Laptop Charger",
         screenProtector: "Screen Protector", chargerCComplete: "C Type Complete Charger",
         chargerIPhone: "Complete iPhone Charger", cableCtoC: "Type C to Type C Cable",
-        cableCtoLight: "Type C – Lightning Cable", fastAdapter: "30W Fast Charge Adapter"
+        cableCtoLight: "Type C – Lightning Cable", fastAdapter: "30W Fast Charge Adapter",
+        // NEW ITEMS ADDED HERE - Using exact display names you provided
+        fastChargeUSBAdapter: "Fast Charge USB adapter",
+        usbToCCable: "USB to C cable",
+        usbToLightningApple: "USB to Lightning (apple)"
     };
 
     // ------ PDF GENERATION ------
     function generatePDF() {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
+        
+        // Make PDF more compact by using smaller font sizes and margins
+        let y = 15; // Start higher up
 
         let client = document.getElementById("clientName").value || "N/A";
 
@@ -385,43 +403,42 @@
         setTimeout(() => { if (imagesLoaded < 3) imagesLoaded = 3; buildPDF(); }, 500);
 
         function buildPDF() {
-            let y = 20;
-
-            // ----- HEADER (email removed) -----
-            try { doc.addImage(logo, "JPEG", 15, 10, 35, 25); } catch (e) { console.warn("logo missing"); }
-            doc.setFontSize(18);
+            // ----- HEADER (more compact) -----
+            try { doc.addImage(logo, "JPEG", 12, 8, 30, 20); } catch (e) { console.warn("logo missing"); }
+            doc.setFontSize(16); // Smaller
             doc.setFont(undefined, "bold");
-            doc.text("AllServe Traders", 60, 20);
+            doc.text("AllServe Traders", 50, 15);
             doc.setFont(undefined, "normal");
+            doc.setFontSize(8); // Smaller
+            doc.text("Your one-stop shop: PPE, software, electronics", 50, 22);
+            doc.text("Cell: 073 725 2514", 50, 28);
+
+            doc.setFontSize(14); // Smaller
+            doc.text(title, 150, 15);
+            doc.setFontSize(8); // Smaller
+            doc.text("No: " + docNumber, 150, 22);
+            doc.text("Date: " + today, 150, 28);
+
+            y = 35; // Start content higher
+            doc.line(12, y, 198, y);
+            y += 6;
+
+            doc.text("Bill To:", 12, y);
+            y += 4;
+            doc.text(client, 12, y);
+            y += 6;
+            doc.line(12, y, 198, y);
+            y += 6;
+
+            // Table header - smaller font
             doc.setFontSize(9);
-            doc.text("Your one-stop shop: PPE, software, electronics", 60, 27);
-            doc.text("Cell: 073 725 2514", 60, 33);
-
-            doc.setFontSize(16);
-            doc.text(title, 150, 20);
-            doc.setFontSize(10);
-            doc.text("No: " + docNumber, 150, 28);
-            doc.text("Date: " + today, 150, 35);
-
-            y = 45;
-            doc.line(15, y, 195, y);
-            y += 8;
-
-            doc.text("Bill To:", 15, y);
-            y += 5;
-            doc.text(client, 15, y);
-            y += 8;
-            doc.line(15, y, 195, y);
-            y += 8;
-
-            // Table header
-            doc.text("Item", 15, y);
+            doc.text("Item", 12, y);
             doc.text("Qty", 105, y);
             doc.text("Unit", 135, y);
             doc.text("Total", 170, y);
-            y += 4;
-            doc.line(15, y, 195, y);
-            y += 6;
+            y += 3;
+            doc.line(12, y, 198, y);
+            y += 5;
 
             let grandTotal = 0;
 
@@ -429,11 +446,12 @@
                 if (qty && qty > 0) {
                     let total = qty * unitPrice;
                     grandTotal += total;
-                    doc.text(label, 15, y);
+                    doc.setFontSize(8); // Smaller font for items
+                    doc.text(label.substring(0, 30), 12, y); // Truncate long names
                     doc.text(qty.toString(), 105, y);
                     doc.text("R" + unitPrice.toFixed(2), 135, y);
                     doc.text("R" + total.toFixed(2), 170, y);
-                    y += 8;
+                    y += 5; // Smaller line spacing
                 }
             }
 
@@ -458,17 +476,18 @@
             // Loan amount – positive line item
             let loanAmount = parseFloat(document.getElementById("loanPaid")?.value) || 0;
             if (loanAmount > 0) {
-                doc.text("Loan amount received", 15, y);
+                doc.setFontSize(8);
+                doc.text("Loan amount received", 12, y);
                 doc.text("", 105, y);
                 doc.text("", 135, y);
                 doc.text("R" + loanAmount.toFixed(2), 170, y);
-                y += 8;
+                y += 5;
                 grandTotal += loanAmount;
             }
 
-            doc.line(130, y-2, 195, y-2);
+            doc.line(130, y-2, 198, y-2);
             doc.setFont(undefined, "bold");
-            doc.setFontSize(13);
+            doc.setFontSize(11); // Smaller
             let totalY = y + 2;
 
             if (mode === "invoice" && paidEnabled) {
@@ -478,42 +497,42 @@
             }
             doc.setFont(undefined, "normal");
 
-            // ----- FOOTER (banking left, signature right, paid stamp left on invoice, thanks bottom center-ish) -----
+            // ----- FOOTER (more compact) -----
             let pageHeight = doc.internal.pageSize.height;
 
-            // Banking details – only for quotation, positioned on left side
+            // Banking details – only for quotation
             if (mode === "quotation") {
-                let bankingY = pageHeight - 85;
-                doc.setFontSize(10);
+                let bankingY = pageHeight - 65; // Higher up
+                doc.setFontSize(8); // Smaller
                 doc.setFont(undefined, "bold");
-                doc.text("Banking Details", 15, bankingY);
+                doc.text("Banking Details", 12, bankingY);
                 doc.setFont(undefined, "normal");
-                bankingY += 6;
-                doc.text("Bank: Capitec Bank", 15, bankingY);
-                bankingY += 5;
-                doc.text("Account Holder: Mr AN Ramalepe", 15, bankingY);
-                bankingY += 5;
-                doc.text("Account No: 1679556728", 15, bankingY);
-                bankingY += 5;
-                doc.text("Phone: 073 725 2514", 15, bankingY);
+                bankingY += 4;
+                doc.text("Bank: Capitec Bank", 12, bankingY);
+                bankingY += 4;
+                doc.text("Account Holder: Mr AN Ramalepe", 12, bankingY);
+                bankingY += 4;
+                doc.text("Account No: 1679556728", 12, bankingY);
+                bankingY += 4;
+                doc.text("Phone: 073 725 2514", 12, bankingY);
             }
 
-            // Signature – bottom right corner (x=150, y=pageHeight-45)
-            let signatureY = pageHeight - 45;
-            try { doc.addImage(signature, "JPEG", 150, signatureY-10, 30, 15); } catch (e) { console.warn("signature missing"); }
-            doc.setFontSize(10);
-            doc.text("Authorized signature", 150, signatureY + 12);
+            // Signature – bottom right
+            let signatureY = pageHeight - 35; // Higher up
+            try { doc.addImage(signature, "JPEG", 150, signatureY-8, 25, 12); } catch (e) { console.warn("signature missing"); }
+            doc.setFontSize(8);
+            doc.text("Authorized signature", 150, signatureY + 8);
 
-            // Paid stamp – only if invoice and toggle ON, placed bottom left (x=15)
+            // Paid stamp
             if (mode === "invoice" && paidEnabled) {
-                try { doc.addImage(paidImg, "PNG", 15, signatureY-20, 30, 20); } catch (e) { console.warn("paid.png missing"); }
-                doc.text("Payment received", 20, signatureY + 5);
+                try { doc.addImage(paidImg, "PNG", 12, signatureY-15, 25, 15); } catch (e) { console.warn("paid.png missing"); }
+                doc.text("Payment received", 15, signatureY + 3);
             }
 
-            // Thanks message – exact string, normal font, placed near bottom center
-            doc.setFontSize(9);
+            // Thanks message
+            doc.setFontSize(7);
             doc.setFont(undefined, "normal");
-            doc.text("Thanks For Your Support !", 15, pageHeight - 15);
+            doc.text("Thanks For Your Support !", 12, pageHeight - 12);
 
             // Generate and share
             const pdfBlob = doc.output("blob");
