@@ -248,10 +248,11 @@
         <div class="section-title">💻 Software installations</div>
         <div class="field-group"><label>Windows 10/11 installation (R200)</label><input type="number" id="winInstall" min="0" placeholder="0"></div>
 
-        <div class="section-title">💰 Loans (amount received)</div>
-        <div class="field-group"><label>Loan amount (R)</label><input type="number" id="loanPaid" min="0" step="0.01" placeholder="e.g. 500"></div>
+        <div class="section-title">💰 Loans (amount lent)</div>
+        <!-- Changed label to "Amount lent (R)" -->
+        <div class="field-group"><label>Amount lent (R)</label><input type="number" id="loanPaid" min="0" step="0.01" placeholder="e.g. 500"></div>
 
-        <!-- NEW ADJUSTMENT FIELDS: Extra Payment (+) and Discount (-) -->
+        <!-- Adjustment fields: Extra Payment (+) and Discount (-) -->
         <div class="section-title">➕ Adjustments</div>
         <div class="field-group"><label>Extra payment / amount sent (R) +</label><input type="number" id="extraPayment" min="0" step="0.01" placeholder="e.g. 200"></div>
         <div class="field-group"><label>Discount (R) –</label><input type="number" id="discount" min="0" step="0.01" placeholder="e.g. 50"></div>
@@ -477,22 +478,34 @@
                 if (qty > 0) addRow(displayNames[id], qty, electronicsItems[id]);
             }
 
-            // Loan amount handling (with quotation calculation)
+            // Loan amount handling (modified for quotation with separate interest line)
             let loanAmount = parseFloat(document.getElementById("loanPaid")?.value) || 0;
             if (loanAmount > 0) {
                 if (mode === "quotation") {
-                    // Quotation: calculate repayment based on borrowed amount
-                    let repaymentRate = loanAmount < 600 ? 1.35 : 1.29;
-                    let repaymentAmount = loanAmount * repaymentRate;
+                    // Quotation: show principal and interest separately
+                    let interestRate = loanAmount < 600 ? 0.35 : 0.29;
+                    let interestAmount = loanAmount * interestRate;
+                    let totalRepayment = loanAmount + interestAmount;
+
+                    // Line for amount lent
                     doc.setFontSize(7);
-                    doc.text("Loan repayment (borrowed R" + loanAmount.toFixed(2) + ")", 8, y);
-                    doc.text("", 120, y);  // no qty
-                    doc.text("", 145, y);  // no unit price
-                    doc.text("R" + repaymentAmount.toFixed(2), 175, y);
+                    doc.text("Amount lent", 8, y);
+                    doc.text("", 120, y);
+                    doc.text("", 145, y);
+                    doc.text("R" + loanAmount.toFixed(2), 175, y);
                     y += 3.5;
-                    grandTotal += repaymentAmount;  // add the amount to be returned
+
+                    // Line for interest charged (with percentage)
+                    let ratePercent = interestRate * 100;
+                    doc.text(`Interest charged (${ratePercent}%)`, 8, y);
+                    doc.text("", 120, y);
+                    doc.text("", 145, y);
+                    doc.text("R" + interestAmount.toFixed(2), 175, y);
+                    y += 3.5;
+
+                    grandTotal += totalRepayment;  // add both lines
                 } else {
-                    // Invoice: original behavior – treat as amount received
+                    // Invoice: original behavior – treat as amount received (loan given)
                     doc.setFontSize(7);
                     doc.text("Loan amount received", 8, y);
                     doc.text("", 120, y);
@@ -503,7 +516,7 @@
                 }
             }
 
-            // --- NEW: Extra payment and discount handling ---
+            // Extra payment and discount handling
             let extra = parseFloat(document.getElementById("extraPayment")?.value) || 0;
             let discount = parseFloat(document.getElementById("discount")?.value) || 0;
 
