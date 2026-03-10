@@ -238,6 +238,9 @@
         <div class="field-group"><label>Laboratory Coat (R150)</label><input type="number" id="labCoat" min="0" placeholder="0"></div>
         <div class="field-group"><label>Goggles (R40)</label><input type="number" id="goggles" min="0" placeholder="0"></div>
         <div class="field-group"><label>Gloves (R30)</label><input type="number" id="gloves" min="0" placeholder="0"></div>
+        <!-- NEW ITEMS: Reflector & Helmet -->
+        <div class="field-group"><label>Reflector (R130)</label><input type="number" id="reflector" min="0" placeholder="0"></div>
+        <div class="field-group"><label>Helmet (R30)</label><input type="number" id="helmet" min="0" placeholder="0"></div>
 
         <div class="field-group"><label>🔥 Fire Suit + goggles + gloves (R450)</label><input type="number" id="comboFire" min="0" placeholder="0"></div>
         <div class="field-group"><label>🔵 Navy Suit + goggles + gloves (R270)</label><input type="number" id="comboNavy" min="0" placeholder="0"></div>
@@ -247,6 +250,11 @@
 
         <div class="section-title">💰 Loans (amount received)</div>
         <div class="field-group"><label>Loan amount (R)</label><input type="number" id="loanPaid" min="0" step="0.01" placeholder="e.g. 500"></div>
+
+        <!-- NEW ADJUSTMENT FIELDS: Extra Payment (+) and Discount (-) -->
+        <div class="section-title">➕ Adjustments</div>
+        <div class="field-group"><label>Extra payment / amount sent (R) +</label><input type="number" id="extraPayment" min="0" step="0.01" placeholder="e.g. 200"></div>
+        <div class="field-group"><label>Discount (R) –</label><input type="number" id="discount" min="0" step="0.01" placeholder="e.g. 50"></div>
 
         <div class="section-title">🔌 Electronics & cables</div>
         <div class="field-group"><label>5m Extension (R75)</label><input type="number" id="ext5" min="0" placeholder="0"></div>
@@ -320,10 +328,13 @@
         return String(lastNumber).padStart(3, "0");
     }
 
+    // Updated PPE items including Reflector (130) and Helmet (30)
     const ppeItems = {
         bootsShort: 340, bootsHigh: 420, bootsLaceless: 450,
         suitNavy: 220, suitFire: 400, labCoat: 150,
         goggles: 40, gloves: 30,
+        reflector: 130,      // new
+        helmet: 30,          // new
         comboFire: 450,
         comboNavy: 270
     };
@@ -342,6 +353,8 @@
         bootsShort: "Short-Cut Boots", bootsHigh: "High-Cut Boots", bootsLaceless: "Lace-less Boots",
         suitNavy: "Standard Navy Work Suit", suitFire: "Fire Resistant Work Suit",
         labCoat: "Laboratory Coat", goggles: "Goggles", gloves: "Gloves",
+        reflector: "Reflector",          // new
+        helmet: "Helmet",                // new
         comboFire: "COMBO: Fire suit + goggles + gloves",
         comboNavy: "COMBO: Navy suit + goggles + gloves",
         winInstall: "Windows 10/11 Installation",
@@ -446,7 +459,7 @@
                 }
             }
 
-            // PPE
+            // PPE (including new reflector & helmet)
             for (let id in ppeItems) {
                 let qty = parseInt(document.getElementById(id)?.value) || 0;
                 if (qty > 0) addRow(displayNames[id] || id, qty, ppeItems[id]);
@@ -464,16 +477,54 @@
                 if (qty > 0) addRow(displayNames[id], qty, electronicsItems[id]);
             }
 
-            // Loan amount
+            // Loan amount handling (with quotation calculation)
             let loanAmount = parseFloat(document.getElementById("loanPaid")?.value) || 0;
             if (loanAmount > 0) {
+                if (mode === "quotation") {
+                    // Quotation: calculate repayment based on borrowed amount
+                    let repaymentRate = loanAmount < 600 ? 1.35 : 1.29;
+                    let repaymentAmount = loanAmount * repaymentRate;
+                    doc.setFontSize(7);
+                    doc.text("Loan repayment (borrowed R" + loanAmount.toFixed(2) + ")", 8, y);
+                    doc.text("", 120, y);  // no qty
+                    doc.text("", 145, y);  // no unit price
+                    doc.text("R" + repaymentAmount.toFixed(2), 175, y);
+                    y += 3.5;
+                    grandTotal += repaymentAmount;  // add the amount to be returned
+                } else {
+                    // Invoice: original behavior – treat as amount received
+                    doc.setFontSize(7);
+                    doc.text("Loan amount received", 8, y);
+                    doc.text("", 120, y);
+                    doc.text("", 145, y);
+                    doc.text("R" + loanAmount.toFixed(2), 175, y);
+                    y += 3.5;
+                    grandTotal += loanAmount;
+                }
+            }
+
+            // --- NEW: Extra payment and discount handling ---
+            let extra = parseFloat(document.getElementById("extraPayment")?.value) || 0;
+            let discount = parseFloat(document.getElementById("discount")?.value) || 0;
+
+            if (extra > 0) {
                 doc.setFontSize(7);
-                doc.text("Loan amount received", 8, y);
+                doc.text("Extra payment received", 8, y);
                 doc.text("", 120, y);
                 doc.text("", 145, y);
-                doc.text("R" + loanAmount.toFixed(2), 175, y);
+                doc.text("R" + extra.toFixed(2), 175, y);
                 y += 3.5;
-                grandTotal += loanAmount;
+                grandTotal += extra;
+            }
+
+            if (discount > 0) {
+                doc.setFontSize(7);
+                doc.text("Discount given", 8, y);
+                doc.text("", 120, y);
+                doc.text("", 145, y);
+                doc.text("-R" + discount.toFixed(2), 175, y);  // negative sign for clarity
+                y += 3.5;
+                grandTotal -= discount;
             }
 
             doc.line(145, y-1, 202, y-1);
