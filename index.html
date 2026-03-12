@@ -249,7 +249,7 @@
         <div class="field-group"><label>Windows 10/11 installation (R200)</label><input type="number" id="winInstall" min="0" placeholder="0"></div>
 
         <div class="section-title">💰 Loans (amount lent)</div>
-        <!-- Changed label to "Amount lent (R)" -->
+        <!-- Unified label: Amount lent (R) -->
         <div class="field-group"><label>Amount lent (R)</label><input type="number" id="loanPaid" min="0" step="0.01" placeholder="e.g. 500"></div>
 
         <!-- Adjustment fields: Extra Payment (+) and Discount (-) -->
@@ -478,16 +478,15 @@
                 if (qty > 0) addRow(displayNames[id], qty, electronicsItems[id]);
             }
 
-            // Loan amount handling (modified for quotation with separate interest line)
+            // Loan amount handling – distinct for invoice vs quotation
             let loanAmount = parseFloat(document.getElementById("loanPaid")?.value) || 0;
             if (loanAmount > 0) {
                 if (mode === "quotation") {
-                    // Quotation: show principal and interest separately
+                    // QUOTATION: show principal + interest with percentage
                     let interestRate = loanAmount < 600 ? 0.35 : 0.29;
                     let interestAmount = loanAmount * interestRate;
                     let totalRepayment = loanAmount + interestAmount;
 
-                    // Line for amount lent
                     doc.setFontSize(7);
                     doc.text("Amount lent", 8, y);
                     doc.text("", 120, y);
@@ -495,7 +494,6 @@
                     doc.text("R" + loanAmount.toFixed(2), 175, y);
                     y += 3.5;
 
-                    // Line for interest charged (with percentage)
                     let ratePercent = interestRate * 100;
                     doc.text(`Interest charged (${ratePercent}%)`, 8, y);
                     doc.text("", 120, y);
@@ -503,9 +501,9 @@
                     doc.text("R" + interestAmount.toFixed(2), 175, y);
                     y += 3.5;
 
-                    grandTotal += totalRepayment;  // add both lines
+                    grandTotal += totalRepayment;
                 } else {
-                    // Invoice: original behavior – treat as amount received (loan given)
+                    // INVOICE: show only "Loan amount received" (principal, no interest)
                     doc.setFontSize(7);
                     doc.text("Loan amount received", 8, y);
                     doc.text("", 120, y);
