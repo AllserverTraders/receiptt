@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>AllServe Traders · Invoice & Quotation</title>
+    <title>AllServe Traders · Invoice & Quotation (Loan Periods)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- jsPDF -->
+    <!-- jsPDF with compression -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         * {
@@ -22,7 +22,7 @@
         }
         .card {
             width: 100%;
-            max-width: 900px;
+            max-width: 920px;
             background: white;
             border-radius: 20px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.1);
@@ -162,6 +162,42 @@
             padding-bottom: 3px;
             font-size: 1rem;
         }
+        .loan-period-group {
+            grid-column: span 2;
+            background: #f8fafc;
+            padding: 8px 12px;
+            border-radius: 18px;
+            margin-top: 4px;
+            border: 1px solid #e2e8f0;
+        }
+        .loan-period-group .period-label {
+            font-weight: 700;
+            color: #1e2f4d;
+            font-size: 0.85rem;
+            margin-right: 15px;
+        }
+        .radio-container {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 6px;
+        }
+        .radio-container label {
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: #1f3a5f;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+        .info-note {
+            font-size: 0.7rem;
+            color: #4a627a;
+            margin-top: 6px;
+            font-style: italic;
+        }
         .generate-btn {
             grid-column: span 2;
             background: #1e2f4d;
@@ -190,6 +226,7 @@
                 grid-template-columns: 1fr;
             }
             .section-title,
+            .loan-period-group,
             .generate-btn,
             .note {
                 grid-column: span 1;
@@ -238,7 +275,6 @@
         <div class="field-group"><label>Laboratory Coat (R150)</label><input type="number" id="labCoat" min="0" placeholder="0"></div>
         <div class="field-group"><label>Goggles (R40)</label><input type="number" id="goggles" min="0" placeholder="0"></div>
         <div class="field-group"><label>Gloves (R30)</label><input type="number" id="gloves" min="0" placeholder="0"></div>
-        <!-- NEW ITEMS: Reflector & Helmet -->
         <div class="field-group"><label>Reflector (R130)</label><input type="number" id="reflector" min="0" placeholder="0"></div>
         <div class="field-group"><label>Helmet (R30)</label><input type="number" id="helmet" min="0" placeholder="0"></div>
 
@@ -249,10 +285,26 @@
         <div class="field-group"><label>Windows 10/11 installation (R200)</label><input type="number" id="winInstall" min="0" placeholder="0"></div>
 
         <div class="section-title">💰 Loans (amount lent)</div>
-        <!-- Unified label: Amount lent (R) -->
         <div class="field-group"><label>Amount lent (R)</label><input type="number" id="loanPaid" min="0" step="0.01" placeholder="e.g. 500"></div>
 
-        <!-- Adjustment fields: Extra Payment (+) and Discount (-) -->
+        <!-- NEW: Loan period selector (shown only in quotation mode) -->
+        <div id="loanPeriodSelector" class="loan-period-group" style="display: none;">
+            <div class="period-label">📆 Loan term for interest calculation (Quotation only)</div>
+            <div class="radio-container">
+                <label>
+                    <input type="radio" name="loanPeriod" value="14" checked> 14 days loan
+                </label>
+                <label>
+                    <input type="radio" name="loanPeriod" value="28"> 28 days loan
+                </label>
+            </div>
+            <div class="info-note">
+                ✅ 14d: &lt;R600 → 35% | ≥R600 → 29% &nbsp;&nbsp;|&nbsp;&nbsp;
+                ✅ 28d: &lt;R600 → 45% | ≥R600 → 40%
+            </div>
+        </div>
+
+        <!-- Adjustments -->
         <div class="section-title">➕ Adjustments</div>
         <div class="field-group"><label>Extra payment / amount sent (R) +</label><input type="number" id="extraPayment" min="0" step="0.01" placeholder="e.g. 200"></div>
         <div class="field-group"><label>Discount (R) –</label><input type="number" id="discount" min="0" step="0.01" placeholder="e.g. 50"></div>
@@ -268,7 +320,6 @@
         <div class="field-group"><label>Type C to Type C cable (R55)</label><input type="number" id="cableCtoC" min="0" placeholder="0"></div>
         <div class="field-group"><label>Type C – Lightning cable (R60)</label><input type="number" id="cableCtoLight" min="0" placeholder="0"></div>
         <div class="field-group"><label>30W fast charge adapter (R65)</label><input type="number" id="fastAdapter" min="0" placeholder="0"></div>
-        
         <div class="field-group"><label>Fast Charge USB adapter (R60)</label><input type="number" id="fastChargeUSBAdapter" min="0" placeholder="0"></div>
         <div class="field-group"><label>USB to C cable (R50)</label><input type="number" id="usbToCCable" min="0" placeholder="0"></div>
         <div class="field-group"><label>USB to Lightning (apple) (R55)</label><input type="number" id="usbToLightningApple" min="0" placeholder="0"></div>
@@ -287,6 +338,7 @@
     const quotationBtn = document.getElementById("quotationModeBtn");
     const paidToggleArea = document.getElementById("paidToggleArea");
     const toggleSwitch = document.getElementById("toggleSwitch");
+    const loanPeriodSelectorDiv = document.getElementById("loanPeriodSelector");
 
     function setMode(selectedMode) {
         mode = selectedMode;
@@ -295,6 +347,8 @@
             quotationBtn.classList.remove("active");
             docTypeSpan.innerText = "Invoice";
             paidToggleArea.style.display = "flex";
+            // Hide loan period selector (irrelevant for invoice)
+            if (loanPeriodSelectorDiv) loanPeriodSelectorDiv.style.display = "none";
         } else {
             quotationBtn.classList.add("active");
             invoiceBtn.classList.remove("active");
@@ -302,6 +356,8 @@
             paidToggleArea.style.display = "none";
             paidEnabled = false;
             toggleSwitch.classList.remove("active");
+            // Show loan period selector (quotation mode uses period-based interest)
+            if (loanPeriodSelectorDiv) loanPeriodSelectorDiv.style.display = "block";
         }
     }
 
@@ -329,15 +385,13 @@
         return String(lastNumber).padStart(3, "0");
     }
 
-    // Updated PPE items including Reflector (130) and Helmet (30)
+    // Product catalog (unchanged, includes reflector & helmet)
     const ppeItems = {
         bootsShort: 340, bootsHigh: 420, bootsLaceless: 450,
         suitNavy: 220, suitFire: 400, labCoat: 150,
         goggles: 40, gloves: 30,
-        reflector: 130,      // new
-        helmet: 30,          // new
-        comboFire: 450,
-        comboNavy: 270
+        reflector: 130, helmet: 30,
+        comboFire: 450, comboNavy: 270
     };
 
     const softwareItems = { winInstall: 200 };
@@ -354,8 +408,7 @@
         bootsShort: "Short-Cut Boots", bootsHigh: "High-Cut Boots", bootsLaceless: "Lace-less Boots",
         suitNavy: "Standard Navy Work Suit", suitFire: "Fire Resistant Work Suit",
         labCoat: "Laboratory Coat", goggles: "Goggles", gloves: "Gloves",
-        reflector: "Reflector",          // new
-        helmet: "Helmet",                // new
+        reflector: "Reflector", helmet: "Helmet",
         comboFire: "COMBO: Fire suit + goggles + gloves",
         comboNavy: "COMBO: Navy suit + goggles + gloves",
         winInstall: "Windows 10/11 Installation",
@@ -369,16 +422,27 @@
         usbToLightningApple: "USB to Lightning (apple)"
     };
 
+    function getInterestRateForQuotation(loanAmount, loanPeriodDays) {
+        // loanPeriodDays: "14" or "28"
+        if (loanPeriodDays === "14") {
+            return loanAmount < 600 ? 0.35 : 0.29;
+        } else if (loanPeriodDays === "28") {
+            return loanAmount < 600 ? 0.45 : 0.40;
+        }
+        // fallback (should not happen)
+        return loanAmount < 600 ? 0.35 : 0.29;
+    }
+
     function generatePDF() {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF({
             orientation: 'portrait',
             unit: 'mm',
             format: 'a4',
-            compress: true // Enable compression for smaller file size
+            compress: true
         });
         
-        let y = 10; // Start even higher
+        let y = 10;
 
         let client = document.getElementById("clientName").value || "N/A";
         let today = new Date().toLocaleDateString("en-ZA");
@@ -404,7 +468,6 @@
         setTimeout(() => { if (imagesLoaded < 3) imagesLoaded = 3; buildPDF(); }, 500);
 
         function buildPDF() {
-            // Ultra-compact header
             try { doc.addImage(logo, "JPEG", 8, 5, 25, 15); } catch (e) {}
             doc.setFontSize(14);
             doc.setFont(undefined, "bold");
@@ -432,7 +495,7 @@
             doc.line(8, y, 202, y);
             y += 4;
 
-            // Table header - compact
+            // Table header
             doc.setFontSize(8);
             doc.text("Description", 8, y);
             doc.text("Qty", 120, y);
@@ -448,19 +511,17 @@
                 if (qty && qty > 0) {
                     let total = qty * unitPrice;
                     grandTotal += total;
-                    doc.setFontSize(7); // Very small font for items
-                    
-                    // Truncate long names
+                    doc.setFontSize(7);
                     let shortLabel = label.length > 28 ? label.substring(0, 25) + "..." : label;
                     doc.text(shortLabel, 8, y);
                     doc.text(qty.toString(), 120, y);
                     doc.text("R" + unitPrice.toFixed(2), 145, y);
                     doc.text("R" + total.toFixed(2), 175, y);
-                    y += 3.5; // Minimal line spacing
+                    y += 3.5;
                 }
             }
 
-            // PPE (including new reflector & helmet)
+            // PPE + new items
             for (let id in ppeItems) {
                 let qty = parseInt(document.getElementById(id)?.value) || 0;
                 if (qty > 0) addRow(displayNames[id] || id, qty, ppeItems[id]);
@@ -478,15 +539,19 @@
                 if (qty > 0) addRow(displayNames[id], qty, electronicsItems[id]);
             }
 
-            // Loan amount handling – distinct for invoice vs quotation
+            // ---------- LOAN HANDLING with PERIOD SELECTION (Quotation) ----------
             let loanAmount = parseFloat(document.getElementById("loanPaid")?.value) || 0;
             if (loanAmount > 0) {
                 if (mode === "quotation") {
-                    // QUOTATION: show principal + interest with percentage
-                    let interestRate = loanAmount < 600 ? 0.35 : 0.29;
+                    // Get selected loan period (14 or 28 days)
+                    let selectedPeriodElem = document.querySelector('input[name="loanPeriod"]:checked');
+                    let loanPeriod = selectedPeriodElem ? selectedPeriodElem.value : "14";
+                    let interestRate = getInterestRateForQuotation(loanAmount, loanPeriod);
                     let interestAmount = loanAmount * interestRate;
                     let totalRepayment = loanAmount + interestAmount;
+                    let percentDisplay = (interestRate * 100).toFixed(0);
 
+                    // Row: Amount lent (principal)
                     doc.setFontSize(7);
                     doc.text("Amount lent", 8, y);
                     doc.text("", 120, y);
@@ -494,16 +559,18 @@
                     doc.text("R" + loanAmount.toFixed(2), 175, y);
                     y += 3.5;
 
-                    let ratePercent = interestRate * 100;
-                    doc.text(`Interest charged (${ratePercent}%)`, 8, y);
+                    // Row: Interest charged with period & percentage
+                    let interestLabel = `Interest charged (${percentDisplay}% for ${loanPeriod} days)`;
+                    doc.text(interestLabel, 8, y);
                     doc.text("", 120, y);
                     doc.text("", 145, y);
                     doc.text("R" + interestAmount.toFixed(2), 175, y);
                     y += 3.5;
 
+                    // Add the total loan repayment to grand total (principal + interest)
                     grandTotal += totalRepayment;
                 } else {
-                    // INVOICE: show only "Loan amount received" (principal, no interest)
+                    // INVOICE mode: only "Loan amount received" (principal only, no interest)
                     doc.setFontSize(7);
                     doc.text("Loan amount received", 8, y);
                     doc.text("", 120, y);
@@ -514,7 +581,7 @@
                 }
             }
 
-            // Extra payment and discount handling
+            // Extra payment & discount adjustments
             let extra = parseFloat(document.getElementById("extraPayment")?.value) || 0;
             let discount = parseFloat(document.getElementById("discount")?.value) || 0;
 
@@ -533,16 +600,16 @@
                 doc.text("Discount given", 8, y);
                 doc.text("", 120, y);
                 doc.text("", 145, y);
-                doc.text("-R" + discount.toFixed(2), 175, y);  // negative sign for clarity
+                doc.text("-R" + discount.toFixed(2), 175, y);
                 y += 3.5;
                 grandTotal -= discount;
             }
 
+            // Total line
             doc.line(145, y-1, 202, y-1);
             doc.setFont(undefined, "bold");
             doc.setFontSize(9);
             let totalY = y + 2;
-
             if (mode === "invoice" && paidEnabled) {
                 doc.text("TOTAL: R" + grandTotal.toFixed(2), 130, totalY);
             } else {
@@ -552,7 +619,7 @@
 
             let pageHeight = doc.internal.pageSize.height;
 
-            // Banking details - compact
+            // Banking details (quotation)
             if (mode === "quotation") {
                 let bankingY = pageHeight - 45;
                 doc.setFontSize(7);
@@ -565,23 +632,22 @@
                 doc.text("Acc: 1679556728 | Tel: 073 725 2514", 8, bankingY);
             }
 
-            // Signature - compact
+            // Signature
             let signatureY = pageHeight - 25;
             try { doc.addImage(signature, "JPEG", 150, signatureY-6, 20, 8); } catch (e) {}
             doc.setFontSize(6);
             doc.text("Authorized signature", 150, signatureY + 4);
 
-            // Paid stamp
+            // Paid stamp (invoice only)
             if (mode === "invoice" && paidEnabled) {
                 try { doc.addImage(paidImg, "PNG", 8, signatureY-10, 20, 10); } catch (e) {}
                 doc.text("Payment received", 10, signatureY + 2);
             }
 
-            // Thanks message - very small
+            // Thanks note
             doc.setFontSize(6);
             doc.text("Thanks For Your Support!", 8, pageHeight - 8);
 
-            // Generate with maximum compression
             const pdfBlob = doc.output("blob", { compress: true });
             const fileName = docNumber + ".pdf";
             const pdfUrl = URL.createObjectURL(pdfBlob);
