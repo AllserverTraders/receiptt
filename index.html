@@ -312,8 +312,8 @@
 <body>
 
 <div class="card">
-    <h1>🧱 Ramalepe Brickyard</h1>
-    <div class="subtitle">Invoice & Quotation Generator · quality building supplies & services</div>
+    <h1>🛠️ AllServe Traders</h1>
+    <div class="subtitle">Invoice & Quotation Generator · selling made simple</div>
 
     <div class="mode-bar">
         <button class="mode-btn" id="invoiceModeBtn" onclick="setMode('invoice')">📄 Invoice</button>
@@ -416,7 +416,7 @@
         <button class="generate-btn" onclick="generatePDF()">📄 Generate & Share Document</button>
 
         <div class="note">
-            Ramalepe Brickyard – quality products & support. Thank you for your business!
+            AllServe Traders – quality products & support. Thank you for your business!
         </div>
     </div>
 </div>
@@ -597,7 +597,7 @@
         let today = new Date().toLocaleDateString("en-ZA");
         let numberFormatted = getNextDocumentNumber();
 
-        let docNumber = (mode === "invoice" ? "RBP-INV-" : "RBP-QUO-") + numberFormatted;
+        let docNumber = (mode === "invoice" ? "AST-INV-" : "AST-QUO-") + numberFormatted;
         let title = mode === "invoice" ? "INVOICE" : "QUOTATION";
 
         const logo = new Image();
@@ -636,12 +636,12 @@
 
             doc.setFontSize(14);
             doc.setFont(undefined, "bold");
-            doc.text("Ramalepe Brickyard", 40, 10);
+            doc.text("AllServe Traders", 40, 10);
 
             doc.setFont(undefined, "normal");
             doc.setFontSize(7);
-            doc.text("Quality building supplies & services", 40, 15);
-            doc.text("065 687 7987", 40, 20);
+            doc.text("PPE, software, electronics", 40, 15);
+            doc.text("073 725 2514", 40, 20);
 
             doc.setFontSize(12);
             doc.text(title, 150, 10);
@@ -840,7 +840,7 @@
                 doc.text("Capitec Bank | Mr AN Ramalepe", 8, bankingY);
 
                 bankingY += 3;
-                doc.text("Acc: 1679556728 | Tel: 065 687 7987", 8, bankingY);
+                doc.text("Acc: 1679556728 | Tel: 073 725 2514", 8, bankingY);
             }
 
             let signatureY = pageHeight - 25;
@@ -876,8 +876,8 @@
 
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
                 navigator.share({
-                    title: title + " from Ramalepe Brickyard",
-                    text: "Document from Ramalepe Brickyard",
+                    title: title + " from AllServe",
+                    text: "Document from AllServe Traders",
                     files: [file]
                 }).catch(() => {});
             }
