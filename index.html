@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AllServe Traders</title>
+</head>
+<body style="font-family:Arial;text-align:center;padding-top:100px;">
+
+    <h2>AllServe Traders</h2>
+    <p>Enter PIN to continue</p>
+
+    <input type="password" id="pin" placeholder="PIN">
+    <button onclick="checkPin()">Login</button>
+
+    <script>
+function checkPin() {
+    const pin = document.getElementById("pin").value;
+
+    if (pin === "2003") {
+        sessionStorage.setItem("authenticated", "true");
+        window.location.href = "./main.html";
+    } else {
+        alert("Incorrect PIN");
+    }
+}
+</script>
+
+</body>
+</html>
