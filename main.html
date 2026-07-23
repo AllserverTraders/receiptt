@@ -396,10 +396,8 @@ window.addEventListener("beforeunload", () => {
         <div class="field-group"><label>Fire Resistant Work Suit (R400)</label><input type="number" id="suitFire" min="0" value="" step="1" placeholder="0"></div>
         <div class="field-group"><label>Laboratory Coat (R150)</label><input type="number" id="labCoat" min="0" value="" step="1" placeholder="0"></div>
         <div class="field-group"><label>Goggles (R40)</label><input type="number" id="goggles" min="0" value="" step="1" placeholder="0"></div>
-        <!-- Gloves price updated to R40 -->
-        <div class="field-group"><label>Gloves (R40)</label><input type="number" id="gloves" min="0" value="" step="1" placeholder="0"></div>
-        <!-- Earplugs added at R20 -->
         <div class="field-group"><label>Earplugs (R20)</label><input type="number" id="earplugs" min="0" value="" step="1" placeholder="0"></div>
+        <div class="field-group"><label>Gloves (R40)</label><input type="number" id="gloves" min="0" value="" step="1" placeholder="0"></div>
         <div class="field-group"><label>Reflector Vest (R130)</label><input type="number" id="reflector" min="0" value="" step="1" placeholder="0"></div>
         <div class="field-group"><label>Hard Helmet (R30)</label><input type="number" id="helmet" min="0" value="" step="1" placeholder="0"></div>
         <div class="field-group"><label>🔥 Fire Suit + goggles + gloves (R450)</label><input type="number" id="comboFire" min="0" value="" step="1" placeholder="0"></div>
@@ -551,8 +549,8 @@ window.addEventListener("beforeunload", () => {
         suitFire: { price: 400, name: "Fire Resistant Work Suit" },
         labCoat: { price: 150, name: "Laboratory Coat" },
         goggles: { price: 40, name: "Goggles" },
-        gloves: { price: 40, name: "Gloves" }, // Updated price to 40
-        earplugs: { price: 20, name: "Earplugs" }, // Added new item
+        earplugs: { price: 20, name: "Earplugs" },
+        gloves: { price: 40, name: "Gloves" },
         reflector: { price: 130, name: "Reflector Vest" },
         helmet: { price: 30, name: "Hard Helmet" },
         comboFire: { price: 450, name: "COMBO: Fire suit + goggles + gloves" },
@@ -817,6 +815,4 @@ window.addEventListener("beforeunload", () => {
             const pdfUrl = URL.createObjectURL(pdfBlob);
             const a = document.createElement("a");
             a.href = pdfUrl;
-            a.download = fileName;
-            a.click();
-            const file = new File([pdfBl
+           
