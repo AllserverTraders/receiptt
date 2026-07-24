@@ -396,8 +396,7 @@ window.addEventListener("beforeunload", () => {
         <div class="field-group"><label>Fire Resistant Work Suit (R400)</label><input type="number" id="suitFire" min="0" value="" step="1" placeholder="0"></div>
         <div class="field-group"><label>Laboratory Coat (R150)</label><input type="number" id="labCoat" min="0" value="" step="1" placeholder="0"></div>
         <div class="field-group"><label>Goggles (R40)</label><input type="number" id="goggles" min="0" value="" step="1" placeholder="0"></div>
-        <div class="field-group"><label>Earplugs (R20)</label><input type="number" id="earplugs" min="0" value="" step="1" placeholder="0"></div>
-        <div class="field-group"><label>Gloves (R40)</label><input type="number" id="gloves" min="0" value="" step="1" placeholder="0"></div>
+        <div class="field-group"><label>Gloves (R30)</label><input type="number" id="gloves" min="0" value="" step="1" placeholder="0"></div>
         <div class="field-group"><label>Reflector Vest (R130)</label><input type="number" id="reflector" min="0" value="" step="1" placeholder="0"></div>
         <div class="field-group"><label>Hard Helmet (R30)</label><input type="number" id="helmet" min="0" value="" step="1" placeholder="0"></div>
         <div class="field-group"><label>🔥 Fire Suit + goggles + gloves (R450)</label><input type="number" id="comboFire" min="0" value="" step="1" placeholder="0"></div>
@@ -549,10 +548,9 @@ window.addEventListener("beforeunload", () => {
         suitFire: { price: 400, name: "Fire Resistant Work Suit" },
         labCoat: { price: 150, name: "Laboratory Coat" },
         goggles: { price: 40, name: "Goggles" },
-        earplugs: { price: 20, name: "Earplugs" },
         gloves: { price: 40, name: "Gloves" },
         reflector: { price: 130, name: "Reflector Vest" },
-        helmet: { price: 30, name: "Hard Helmet" },
+        EarPlugs: { price: 20, name: "Ear Plugs" },
         comboFire: { price: 450, name: "COMBO: Fire suit + goggles + gloves" },
         comboNavy: { price: 270, name: "COMBO: Navy suit + goggles + gloves" }
     };
@@ -608,7 +606,7 @@ window.addEventListener("beforeunload", () => {
         const signature = new Image();
         logo.src = "assets/logo.jpeg";
         paidImg.src = "assets/paid.png";
-        signature.src = "assets/signature.png";
+        signature.src = "assets/signature.jpeg";
 
         let imagesLoaded = 0;
         function tryGenerate() {
@@ -817,4 +815,16 @@ window.addEventListener("beforeunload", () => {
             a.href = pdfUrl;
             a.download = fileName;
             a.click();
-            const file =
+            const file = new File([pdfBlob], fileName, { type: "application/pdf" });
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                navigator.share({
+                    title: title + " from " + businessName,
+                    text: "Document from AllServe Traders",
+                    files: [file]
+                }).catch(() => {});
+            }
+        }
+    }
+</script>
+</body>
+</html>
