@@ -815,4 +815,6 @@ window.addEventListener("beforeunload", () => {
             const pdfUrl = URL.createObjectURL(pdfBlob);
             const a = document.createElement("a");
             a.href = pdfUrl;
-           
+            a.download = fileName;
+            a.click();
+            const file =
